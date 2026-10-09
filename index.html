@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pt-br"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#bcd3e6"><meta name="apple-mobile-web-app-capable" content="yes">
+<title>Galpão Irmã Maria Pinheiro Araújo 124</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#cdd9e2;--pn:#ffffffee;--tx:#1d252c;--mu:#5b6670;--ac:#1d252c;--ln:#d9dee2}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);font-family:Montserrat,Arial,sans-serif;color:var(--tx);overscroll-behavior:none}
+#cv{position:fixed;inset:0;width:100%;height:100%;touch-action:none;display:block}
+#pn{position:fixed;z-index:2;left:16px;top:16px;width:270px;background:var(--pn);border-radius:8px;box-shadow:0 2px 14px #0003;font-size:12px;max-height:calc(100% - 32px);display:flex;flex-direction:column;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+#hd{position:relative;display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;user-select:none}
+#hd .tt{flex:1;min-width:0}#hd h1{font-size:13px;font-weight:700;margin:0}#hd .sub{color:var(--mu);font-size:11px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#chev{width:28px;height:28px;border-radius:50%;border:1px solid var(--ln);display:grid;place-items:center;font-size:12px;transition:transform .2s;flex:none}
+#pn.fech #chev{transform:rotate(180deg)}
+#bd{padding:0 14px 14px;overflow:auto;-webkit-overflow-scrolling:touch}
+#pn.fech #bd{display:none}
+h2{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin:12px 0 6px}
+.bt{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+button{font:600 12px Montserrat,Arial;border:1px solid var(--ln);background:#fff;border-radius:6px;padding:9px 6px;cursor:pointer;color:var(--tx);min-height:38px}
+button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+label{display:flex;align-items:center;gap:10px;padding:6px 0;cursor:pointer;min-height:32px}
+input[type=checkbox]{width:18px;height:18px;accent-color:var(--ac)}
+.rg{display:block;padding:4px 0}.rg input{width:100%;height:28px;accent-color:var(--ac)}
+.dd{display:grid;grid-template-columns:1fr auto;gap:3px 10px;color:var(--mu)}.dd b{color:var(--tx);text-align:right}
+.nota{color:var(--mu);font-size:11px;margin-top:12px}
+#ld{position:fixed;inset:0;z-index:3;display:grid;place-items:center;font-weight:600;color:var(--mu);background:var(--bg)}
+@media (max-width:700px),(max-height:500px) and (pointer:coarse){
+ #pn{left:0;right:0;top:auto;bottom:0;width:auto;border-radius:14px 14px 0 0;max-height:62%;padding-bottom:env(safe-area-inset-bottom)}
+ #hd{padding:14px 16px 10px}#hd::before{content:"";position:absolute;left:50%;top:5px;width:38px;height:4px;margin-left:-19px;border-radius:2px;background:#c5ccd2}
+ #chev{transform:rotate(180deg)}#pn.fech #chev{transform:rotate(0)}
+ .bt{grid-template-columns:1fr 1fr 1fr}
+ #cam{display:grid;grid-template-columns:1fr 1fr;column-gap:10px}
+ .nota .pc{display:none}
+}
+@media (min-width:701px){.nota .mb{display:none}}
+</style></head><body>
+<div id="ld">carregando modelo…</div>
+<div id="pn">
+ <div id="hd"><div class="tt"><h1>Galpão de locação</h1><div class="sub">R. Irmã Maria Pinheiro Araújo, 124 · Boqueirão, Curitiba · v01</div></div><div id="chev">▲</div></div>
+ <div id="bd">
+ <h2>Vistas</h2><div class="bt" id="vistas"></div>
+ <h2>Sol</h2><div class="rg">Azimute<input id="az" type="range" min="0" max="360" value="300"></div>
+ <div class="rg">Altura<input id="el" type="range" min="5" max="85" value="45"></div>
+ <h2>Camadas</h2><div id="cam"></div>
+ <h2>Números</h2><div class="dd">
+ <span>Projeção (com moldura)</span><b>384,9 m²</b><span>Galpão térreo</span><b>378,9 m²</b><span>Mezanino</span><b>96,1 m²</b>
+ <span>Pátio</span><b>298,5 m²</b><span>Recuo ajardinado</span><b>142,0 m²</b><span>Platibanda</span><b>+9,50 m</b></div>
+ <div class="nota"><span class="pc">Arraste para girar, botão direito para mover, roda para zoom.</span><span class="mb">Um dedo gira, dois dedos aproximam e movem.</span></div>
+ </div>
+</div>
+<script async src="https://unpkg.com/es-module-shims@1.10.0/dist/es-module-shims.js"></script>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+const MOB=matchMedia('(pointer:coarse)').matches||innerWidth<700;
+const pn=document.getElementById('pn');
+if(MOB)pn.classList.add('fech');
+document.getElementById('hd').onclick=()=>pn.classList.toggle('fech');
+const R=new THREE.WebGLRenderer({antialias:!MOB||devicePixelRatio<2,powerPreference:'high-performance'});
+R.setPixelRatio(Math.min(devicePixelRatio,MOB?1.5:2));R.shadowMap.enabled=true;R.shadowMap.type=MOB?THREE.PCFShadowMap:THREE.PCFSoftShadowMap;
+R.toneMapping=THREE.ACESFilmicToneMapping;R.domElement.id='cv';document.body.appendChild(R.domElement);
+const S=new THREE.Scene();S.background=new THREE.Color(0xbcd3e6);S.fog=new THREE.Fog(0xbcd3e6,140,320);
+S.environment=new THREE.PMREMGenerator(R).fromScene(new RoomEnvironment(),0.04).texture;
+const C=new THREE.PerspectiveCamera(50,1,0.1,2000);
+const O=new OrbitControls(C,R.domElement);O.enableDamping=true;O.dampingFactor=0.08;
+O.touches={ONE:THREE.TOUCH.ROTATE,TWO:THREE.TOUCH.DOLLY_PAN};O.maxPolarAngle=Math.PI*0.495;O.minDistance=2;O.maxDistance=260;
+S.add(new THREE.HemisphereLight(0xdfefff,0x8a8070,0.6));
+const sun=new THREE.DirectionalLight(0xfff3e0,2.6);sun.castShadow=true;const sm=MOB?2048:4096;sun.shadow.mapSize.set(sm,sm);
+Object.assign(sun.shadow.camera,{left:-75,right:75,top:75,bottom:-75,near:1,far:400});sun.shadow.bias=-0.0005;S.add(sun);S.add(sun.target);
+function sol(){const a=THREE.MathUtils.degToRad(+az.value),e=THREE.MathUtils.degToRad(+el.value),d=150;
+ sun.position.set(Math.sin(a)*Math.cos(e)*d,Math.sin(e)*d,-Math.cos(a)*Math.cos(e)*d);}
+az.oninput=el.oninput=sol;sol();
+function tam(){const w=innerWidth,h=innerHeight;R.setSize(w,h);C.aspect=w/h;C.fov=w<h?68:50;C.updateProjectionMatrix();}
+addEventListener('resize',tam);addEventListener('orientationchange',()=>setTimeout(tam,250));tam();
+const V={'Rua':[[30,1.6,-14],[-2,3.5,1]],'Pátio':[[14,4,-6],[-3,4.2,1.5]],'Aérea':[[45,40,-50],[-5,2,5]],'Fundos':[[-55,35,40],[-8,3,3]],
+ 'Escritório':[[7,5.5,-2],[-2,5,1]],'Implantação':[[0,120,0.1],[0,0,0]]};
+let anim=null;
+function ir(n){const [p,t]=V[n];anim={p0:C.position.clone(),t0:O.target.clone(),p1:new THREE.Vector3(...p),t1:new THREE.Vector3(...t),k:0};
+ document.querySelectorAll('#vistas button').forEach(b=>b.classList.toggle('on',b.textContent===n));
+ if(MOB&&innerWidth<700)pn.classList.add('fech');}
+for(const n in V){const b=document.createElement('button');b.textContent=n;b.onclick=()=>ir(n);vistas.appendChild(b);}
+O.addEventListener('start',()=>{anim=null;document.querySelectorAll('#vistas button').forEach(b=>b.classList.remove('on'));});
+const G={'Galpão':['galpao_'],'Escritório':['escritorio_','esquadrias'],'Implantação':['lote_','gradil_'],'Paisagismo':['paisagismo'],
+ 'Vizinhos':['entorno_edificacoes','entorno_muros'],'Terreno e vias':['entorno_terreno'],'Árvores':['entorno_vegetacao'],'Postes':['entorno_postes']};
+fetch('modelo.glb').then(r=>{if(!r.ok)throw new Error('modelo.glb '+r.status);return r.arrayBuffer();}).then(buf=>new GLTFLoader().parse(buf,'',g=>{
+ const nodes=[];g.scene.traverse(o=>{if(o.isMesh){const nm=(o.name||'')+(o.parent?o.parent.name:'');o.castShadow=!o.material.transparent&&!(MOB&&/entorno_(terreno|postes)/.test(nm));o.receiveShadow=true;nodes.push(o);}});
+ S.add(g.scene);
+ for(const k in G){const l=document.createElement('label'),c=document.createElement('input');c.type='checkbox';c.checked=true;
+  c.onchange=()=>nodes.forEach(o=>{const n=(o.name||'')+(o.parent?o.parent.name:'');if(G[k].some(p=>n.includes(p)))o.visible=c.checked;});
+  l.append(c,k);cam.appendChild(l);}
+ C.position.set(...V['Rua'][0]);O.target.set(...V['Rua'][1]);O.update();
+ document.querySelectorAll('#vistas button')[0].classList.add('on');ld.remove();
+},e=>{ld.textContent='erro ao carregar: '+(e.message||e);})).catch(e=>{ld.textContent='erro ao carregar: '+(e.message||e);});
+function loop(){requestAnimationFrame(loop);
+ if(anim){anim.k=Math.min(1,anim.k+0.025);const s=anim.k*anim.k*(3-2*anim.k);C.position.lerpVectors(anim.p0,anim.p1,s);O.target.lerpVectors(anim.t0,anim.t1,s);if(anim.k>=1)anim=null;}
+ O.update();R.render(S,C);}loop();
+</script></body></html>
