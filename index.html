@@ -63,7 +63,7 @@ if(MOB)pn.classList.add('fech');
 document.getElementById('hd').onclick=()=>pn.classList.toggle('fech');
 const R=new THREE.WebGLRenderer({antialias:!MOB||devicePixelRatio<2,powerPreference:'high-performance'});
 R.setPixelRatio(Math.min(devicePixelRatio,MOB?1.5:2));R.shadowMap.enabled=true;R.shadowMap.type=MOB?THREE.PCFShadowMap:THREE.PCFSoftShadowMap;
-R.toneMapping=THREE.ACESFilmicToneMapping;R.domElement.id='cv';document.body.appendChild(R.domElement);
+R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=0.85;R.domElement.id='cv';document.body.appendChild(R.domElement);
 const S=new THREE.Scene();S.background=new THREE.Color(0xbcd3e6);S.fog=new THREE.Fog(0xbcd3e6,140,320);
 S.environment=new THREE.PMREMGenerator(R).fromScene(new RoomEnvironment(),0.04).texture;
 const C=new THREE.PerspectiveCamera(50,1,0.1,2000);
