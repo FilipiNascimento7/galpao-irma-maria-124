@@ -2,7 +2,7 @@
 <html lang="pt-br"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#bcd3e6"><meta name="apple-mobile-web-app-capable" content="yes">
-<title>Galpão Irmã Maria Pinheiro Araújo 124</title>
+<title>Galpão de locação</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#cdd9e2;--pn:#ffffffee;--tx:#1d252c;--mu:#5b6670;--ac:#1d252c;--ln:#d9dee2}
@@ -38,7 +38,7 @@ input[type=checkbox]{width:18px;height:18px;accent-color:var(--ac)}
 </style></head><body>
 <div id="ld">carregando modelo…</div>
 <div id="pn">
- <div id="hd"><div class="tt"><h1>Galpão de locação</h1><div class="sub">R. Irmã Maria Pinheiro Araújo, 124 · Boqueirão, Curitiba · v01</div></div><div id="chev">▲</div></div>
+ <div id="hd"><div class="tt"><h1>Galpão de locação</h1></div><div id="chev">▲</div></div>
  <div id="bd">
  <h2>Vistas</h2><div class="bt" id="vistas"></div>
  <h2>Sol</h2><div class="rg">Azimute<input id="az" type="range" min="0" max="360" value="300"></div>
@@ -69,11 +69,13 @@ S.environment=new THREE.PMREMGenerator(R).fromScene(new RoomEnvironment(),0.04).
 const C=new THREE.PerspectiveCamera(50,1,0.1,2000);
 const O=new OrbitControls(C,R.domElement);O.enableDamping=true;O.dampingFactor=0.08;
 O.touches={ONE:THREE.TOUCH.ROTATE,TWO:THREE.TOUCH.DOLLY_PAN};O.maxPolarAngle=Math.PI*0.495;O.minDistance=2;O.maxDistance=260;
-S.add(new THREE.HemisphereLight(0xdfefff,0x8a8070,0.6));
-const sun=new THREE.DirectionalLight(0xfff3e0,2.6);sun.castShadow=true;const sm=MOB?2048:4096;sun.shadow.mapSize.set(sm,sm);
-Object.assign(sun.shadow.camera,{left:-75,right:75,top:75,bottom:-75,near:1,far:400});sun.shadow.bias=-0.0005;S.add(sun);S.add(sun.target);
-function sol(){const a=THREE.MathUtils.degToRad(+az.value),e=THREE.MathUtils.degToRad(+el.value),d=150;
- sun.position.set(Math.sin(a)*Math.cos(e)*d,Math.sin(e)*d,-Math.cos(a)*Math.cos(e)*d);}
+S.add(new THREE.HemisphereLight(0xdfefff,0x8a8070,0.45));
+const sun=new THREE.DirectionalLight(0xfff3e0,3.0);sun.castShadow=true;const sm=MOB?2048:4096;sun.shadow.mapSize.set(sm,sm);
+Object.assign(sun.shadow.camera,{left:-75,right:75,top:75,bottom:-75,near:1,far:400});sun.shadow.camera.updateProjectionMatrix();sun.shadow.bias=-0.0003;sun.shadow.normalBias=0.03;S.add(sun);S.add(sun.target);
+const SD=new THREE.Vector3();
+function sol(){const a=THREE.MathUtils.degToRad(+az.value),e=THREE.MathUtils.degToRad(+el.value);
+ SD.set(Math.sin(a)*Math.cos(e),Math.sin(e),-Math.cos(a)*Math.cos(e)).multiplyScalar(150);posSol();}
+function posSol(){const t=typeof O!=='undefined'?O.target:new THREE.Vector3();sun.target.position.set(t.x,0,t.z);sun.position.copy(sun.target.position).add(SD);}
 az.oninput=el.oninput=sol;sol();
 function tam(){const w=innerWidth,h=innerHeight;R.setSize(w,h);C.aspect=w/h;C.fov=w<h?68:50;C.updateProjectionMatrix();}
 addEventListener('resize',tam);addEventListener('orientationchange',()=>setTimeout(tam,250));tam();
@@ -88,7 +90,7 @@ O.addEventListener('start',()=>{anim=null;document.querySelectorAll('#vistas but
 const G={'Galpão':['galpao_'],'Escritório':['escritorio_','esquadrias'],'Implantação':['lote_','gradil_'],'Paisagismo':['paisagismo'],
  'Vizinhos':['entorno_edificacoes','entorno_muros'],'Terreno e vias':['entorno_terreno'],'Árvores':['entorno_vegetacao'],'Postes':['entorno_postes']};
 fetch('modelo.glb').then(r=>{if(!r.ok)throw new Error('modelo.glb '+r.status);return r.arrayBuffer();}).then(buf=>new GLTFLoader().parse(buf,'',g=>{
- const nodes=[];g.scene.traverse(o=>{if(o.isMesh){const nm=(o.name||'')+(o.parent?o.parent.name:'');o.castShadow=!o.material.transparent&&!(MOB&&/entorno_(terreno|postes)/.test(nm));o.receiveShadow=true;nodes.push(o);}});
+ const nodes=[];g.scene.traverse(o=>{if(o.isMesh){const nm=(o.name||'')+(o.parent?o.parent.name:'');o.castShadow=!o.material.transparent&&!(MOB&&/entorno_(terreno|postes)/.test(nm));o.receiveShadow=true;if(!o.geometry.attributes.normal){const gg=o.geometry.index?o.geometry.toNonIndexed():o.geometry;gg.computeVertexNormals();o.geometry=gg;}o.material.envMapIntensity=0.45;nodes.push(o);}});
  S.add(g.scene);
  for(const k in G){const l=document.createElement('label'),c=document.createElement('input');c.type='checkbox';c.checked=true;
   c.onchange=()=>nodes.forEach(o=>{const n=(o.name||'')+(o.parent?o.parent.name:'');if(G[k].some(p=>n.includes(p)))o.visible=c.checked;});
@@ -98,5 +100,5 @@ fetch('modelo.glb').then(r=>{if(!r.ok)throw new Error('modelo.glb '+r.status);re
 },e=>{ld.textContent='erro ao carregar: '+(e.message||e);})).catch(e=>{ld.textContent='erro ao carregar: '+(e.message||e);});
 function loop(){requestAnimationFrame(loop);
  if(anim){anim.k=Math.min(1,anim.k+0.025);const s=anim.k*anim.k*(3-2*anim.k);C.position.lerpVectors(anim.p0,anim.p1,s);O.target.lerpVectors(anim.t0,anim.t1,s);if(anim.k>=1)anim=null;}
- O.update();R.render(S,C);}loop();
+ O.update();posSol();R.render(S,C);}loop();
 </script></body></html>
